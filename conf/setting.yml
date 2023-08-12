@@ -1,0 +1,7 @@
+db:
+  dns: "root:a5615101@tcp(127.0.0.1:3306)/ikun?charset=utf8mb4&parseTime=True&loc=Local" #数据库连接地址
+  SetMaxIdleConns: 10 #最多空闲连接数
+  SetMaxOpenConns: 10 #最多打开连接数
+
+server:
+  port: 8090
