@@ -28,9 +28,9 @@ func RegisterRoutes(fn IFnRegisterRoute) {
 func InitRoutes() {
 	RegisterRoutes(func(rgPublic *gin.RouterGroup, rgAuthor *gin.RouterGroup) {
 		userControl := control.NewUserControl()
-		// rgPublicUser := rgPublic.Group("user")
+		rgPublicUser := rgPublic.Group("user")
 
-		// rgPublicUser.GET("/login", userControl.Login)
+		rgPublicUser.GET("/login", userControl.Login)
 
 		rgAuthorUser := rgAuthor.Group("user")
 		rgAuthorUser.POST("/add", userControl.AddUser)

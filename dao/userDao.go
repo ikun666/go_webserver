@@ -36,3 +36,10 @@ func (m *UserDao) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 	}
 	return err
 }
+
+// 登录
+func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, error) {
+	var user model.User
+	err := m.DB.Model(&user).Where("name=? and password=?", iLoginDTO.Name, iLoginDTO.Password).Find(&user).Error
+	return user, err
+}

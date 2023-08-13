@@ -20,3 +20,8 @@ func (m *AddUserDTO) Convert2Model(iUser *model.User) {
 	iUser.Email = m.Email
 	iUser.Password = m.Password
 }
+
+type LoginDTO struct {
+	Name     string `json:"name" form:"name" binding:"required" message:"name is null"`
+	Password string `json:"password,omitempty" form:"password" binding:"required" message:"password is null"`
+}
