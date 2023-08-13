@@ -1,6 +1,9 @@
 package model
 
-import "gorm.io/gorm"
+import (
+	"github.com/ikun666/go_webserver/utils"
+	"gorm.io/gorm"
+)
 
 type User struct {
 	gorm.Model
@@ -10,4 +13,13 @@ type User struct {
 	Mobile   string `json:"mobile" gorm:"size:64"`
 	Email    string `json:"email" gorm:"size:128"`
 	Password string `json:"-" gorm:"size:128;not null"`
+}
+
+// gorm hook func(*gorm.DB) error
+func (u *User) BeforeCreate(tx *gorm.DB) error {
+	password, err := utils.Crypt(u.Password)
+	if err == nil {
+		u.Password = password
+	}
+	return err
 }

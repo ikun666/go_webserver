@@ -62,6 +62,7 @@ func (c UserControl) Login(ctx *gin.Context) {
 			Code: ERR_BIND,
 			Msg:  err.Error(),
 		})
+		return
 	}
 
 	user, err := c.Service.Login(&iLoginDTO)

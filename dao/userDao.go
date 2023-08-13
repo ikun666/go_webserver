@@ -1,9 +1,12 @@
 package dao
 
 import (
+	"errors"
+
 	"github.com/ikun666/go_webserver/dto"
 	"github.com/ikun666/go_webserver/global"
 	"github.com/ikun666/go_webserver/model"
+	"github.com/ikun666/go_webserver/utils"
 )
 
 type UserDao struct {
@@ -24,6 +27,13 @@ func NewUserDao() *UserDao {
 	return iUserDao
 }
 
+// 通过name获取用户
+func (m *UserDao) GetUserById(name string) (model.User, error) {
+	var user model.User
+	err := m.DB.Model(&user).Where("name=?", name).Find(&user).Error
+	return user, err
+}
+
 // 添加用户
 func (m *UserDao) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 	var user model.User
@@ -39,7 +49,12 @@ func (m *UserDao) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 
 // 登录
 func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, error) {
-	var user model.User
-	err := m.DB.Model(&user).Where("name=? and password=?", iLoginDTO.Name, iLoginDTO.Password).Find(&user).Error
+	// var user model.User
+	// err := m.DB.Model(&user).Where("name=? and password=?", iLoginDTO.Name, iLoginDTO.Password).Find(&user).Error
+	user, err := m.GetUserById(iLoginDTO.Name)
+	//密码不对
+	if err != nil || !utils.ComparePassword(user.Password, iLoginDTO.Password) {
+		err = errors.New("password err")
+	}
 	return user, err
 }
