@@ -29,6 +29,11 @@ func (s *UserService) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 }
 
 // 登录用户
-func (s *UserService) Login(iLoginDTO *dto.LoginDTO) (model.User, error) {
+func (s *UserService) Login(iLoginDTO *dto.LoginDTO) (model.User, string, error) {
 	return s.Dao.Login(iLoginDTO)
+}
+
+// 查找用户
+func (s *UserService) GetUserByName(name string) (model.User, error) {
+	return s.Dao.GetUserByName(name)
 }

@@ -1,8 +1,6 @@
 package control
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,11 +21,11 @@ type BaseControl struct {
 // }
 
 func (c BaseControl) OK(ctx *gin.Context, resp ResponseJson) {
-	ctx.AbortWithStatusJSON(http.StatusOK, resp)
+	OK(ctx, resp)
 }
 func (c BaseControl) Fail(ctx *gin.Context, resp ResponseJson) {
-	ctx.AbortWithStatusJSON(http.StatusBadRequest, resp)
+	Fail(ctx, resp)
 }
 func (c BaseControl) ServerFail(ctx *gin.Context, resp ResponseJson) {
-	ctx.AbortWithStatusJSON(http.StatusInternalServerError, resp)
+	ServerFail(ctx, resp)
 }

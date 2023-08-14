@@ -16,6 +16,7 @@ const (
 	ERR_BIND     = 40000
 	ERR_ADD_USER = 40001
 	ERR_LOGIN    = 40002
+	ERR_GET_NAME = 40003
 )
 
 // 多用户访问，不做单例
@@ -65,7 +66,7 @@ func (c UserControl) Login(ctx *gin.Context) {
 		return
 	}
 
-	user, err := c.Service.Login(&iLoginDTO)
+	user, token, err := c.Service.Login(&iLoginDTO)
 	if err != nil {
 		c.ServerFail(ctx, ResponseJson{
 			Code: ERR_LOGIN,
@@ -74,7 +75,34 @@ func (c UserControl) Login(ctx *gin.Context) {
 		return
 	}
 	c.OK(ctx, ResponseJson{
-		Msg:  "login success",
+		Msg: "login success",
+		Data: gin.H{
+			"user":  user,
+			"token": token,
+		},
+	})
+}
+
+func (c UserControl) GetUserByName(ctx *gin.Context) {
+	var iCommonDTO dto.CommonDTO
+	err := ctx.ShouldBind(&iCommonDTO)
+	if err != nil {
+		c.Fail(ctx, ResponseJson{
+			Code: ERR_BIND,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	user, err := c.Service.GetUserByName(iCommonDTO.Name)
+	if err != nil {
+		c.ServerFail(ctx, ResponseJson{
+			Code: ERR_GET_NAME,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.OK(ctx, ResponseJson{
+		Msg:  "get user success",
 		Data: user,
 	})
 }

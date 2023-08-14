@@ -5,3 +5,7 @@ db:
 
 server:
   port: 8090
+
+jwt:
+  key: "ikun_ctrl" #签名密钥
+  accessTokenExpire: 1 #min
