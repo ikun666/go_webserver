@@ -48,16 +48,17 @@ func (m *UserDao) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 }
 
 // 登录
-func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, string, error) {
+func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, utils.Tokens, error) {
 	// var user model.User
 	// err := m.DB.Model(&user).Where("name=? and password=?", iLoginDTO.Name, iLoginDTO.Password).Find(&user).Error
 	user, err := m.GetUserByName(iLoginDTO.Name)
 	//密码不对
 	if err != nil || !utils.ComparePassword(user.Password, iLoginDTO.Password) {
 		err = errors.New("password err")
-		return user, "", err
+		return user, utils.Tokens{}, err
 	} else {
 		token, err := utils.GetToken(user.ID, user.Name)
+
 		if err != nil {
 			err = errors.New("get token err")
 		}

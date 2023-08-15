@@ -67,6 +67,7 @@ func (c UserControl) Login(ctx *gin.Context) {
 	}
 
 	user, token, err := c.Service.Login(&iLoginDTO)
+	// fmt.Println(token)
 	if err != nil {
 		c.ServerFail(ctx, ResponseJson{
 			Code: ERR_LOGIN,
@@ -74,6 +75,7 @@ func (c UserControl) Login(ctx *gin.Context) {
 		})
 		return
 	}
+	ctx.Set(token.AccessToken, user.Name)
 	c.OK(ctx, ResponseJson{
 		Msg: "login success",
 		Data: gin.H{

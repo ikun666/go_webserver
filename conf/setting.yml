@@ -9,3 +9,4 @@ server:
 jwt:
   key: "ikun_ctrl" #签名密钥
   accessTokenExpire: 1 #min
+  refreshTokenExpire: 2 #min
