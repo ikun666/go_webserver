@@ -17,6 +17,7 @@ const (
 	ERR_ADD_USER = 40001
 	ERR_LOGIN    = 40002
 	ERR_GET_NAME = 40003
+	ERR_DEL_NAME = 40004
 )
 
 // 多用户访问，不做单例
@@ -106,5 +107,28 @@ func (c UserControl) GetUserByName(ctx *gin.Context) {
 	c.OK(ctx, ResponseJson{
 		Msg:  "get user success",
 		Data: user,
+	})
+}
+
+func (c UserControl) DeleteUserByName(ctx *gin.Context) {
+	var iCommonDTO dto.CommonDTO
+	err := ctx.ShouldBind(&iCommonDTO)
+	if err != nil {
+		c.Fail(ctx, ResponseJson{
+			Code: ERR_BIND,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	err = c.Service.DeleteUserByName(iCommonDTO.Name)
+	if err != nil {
+		c.ServerFail(ctx, ResponseJson{
+			Code: ERR_DEL_NAME,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.OK(ctx, ResponseJson{
+		Msg: "delete user success",
 	})
 }

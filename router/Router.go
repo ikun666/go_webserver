@@ -38,7 +38,7 @@ func InitRoutes() {
 		rgAuthorUser.GET("/id", userControl.GetUserByName)
 		// rgAuthorUser.POST("/list", userControl.GetUserList)
 		// rgAuthorUser.POST("/update", userControl.UpdateUser)
-		// rgAuthorUser.POST("/delete", userControl.DeleteUserById)
+		rgAuthorUser.GET("/delete", userControl.DeleteUserByName)
 	})
 }
 func InitRouter() {
@@ -62,6 +62,7 @@ func InitRouter() {
 	// fmt.Printf("开启服务成功\n")
 
 	//优雅关闭
+	//直接在gin 文档抄过来
 	//默认gin框架
 	r := gin.Default()
 	//分组

@@ -31,6 +31,9 @@ func NewUserDao() *UserDao {
 func (m *UserDao) GetUserByName(name string) (model.User, error) {
 	var user model.User
 	err := m.DB.Model(&user).Where("name=?", name).Find(&user).Error
+	if err == nil && user.ID == 0 {
+		err = errors.New("user not exist")
+	}
 	return user, err
 }
 
@@ -64,4 +67,13 @@ func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, utils.Tokens, erro
 		}
 		return user, token, err
 	}
+}
+
+// 删除用户
+func (m *UserDao) DeleteUserByName(name string) error {
+	var user model.User
+	// Unscoped() 物理删除 没有就是逻辑删除
+	//如果 name 不存在 也会返回删除成功 并无影响
+	//也可以先查询name是否存在返回err 但要多一次查询
+	return m.DB.Unscoped().Model(&user).Where("name=?", name).Delete(&user).Error
 }

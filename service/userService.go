@@ -38,3 +38,8 @@ func (s *UserService) Login(iLoginDTO *dto.LoginDTO) (model.User, utils.Tokens, 
 func (s *UserService) GetUserByName(name string) (model.User, error) {
 	return s.Dao.GetUserByName(name)
 }
+
+// 删除用户
+func (s *UserService) DeleteUserByName(name string) error {
+	return s.Dao.DeleteUserByName(name)
+}
