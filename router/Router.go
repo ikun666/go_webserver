@@ -11,7 +11,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/ikun666/go_webserver/control"
-	"github.com/ikun666/go_webserver/middleware"
 	"github.com/spf13/viper"
 )
 
@@ -37,7 +36,7 @@ func InitRoutes() {
 		rgAuthorUser.POST("/add", userControl.AddUser)
 		rgAuthorUser.GET("/id", userControl.GetUserByName)
 		// rgAuthorUser.POST("/list", userControl.GetUserList)
-		// rgAuthorUser.POST("/update", userControl.UpdateUser)
+		rgAuthorUser.POST("/update", userControl.UpdateUserByName)
 		rgAuthorUser.GET("/delete", userControl.DeleteUserByName)
 	})
 }
@@ -68,7 +67,7 @@ func InitRouter() {
 	//分组
 	rgPublic := r.Group("public")
 	rgAuthor := r.Group("author")
-	rgAuthor.Use(middleware.Author())
+	// rgAuthor.Use(middleware.Author())
 	InitRoutes()
 	for _, fnRoute := range fnRoutes {
 		fnRoute(rgPublic, rgAuthor)

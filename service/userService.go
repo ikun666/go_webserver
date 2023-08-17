@@ -43,3 +43,8 @@ func (s *UserService) GetUserByName(name string) (model.User, error) {
 func (s *UserService) DeleteUserByName(name string) error {
 	return s.Dao.DeleteUserByName(name)
 }
+
+// 更新用户
+func (s *UserService) UpdateUserByName(iUpdateUserDTO *dto.UpdateUserDTO) error {
+	return s.Dao.UpdateUserByName(iUpdateUserDTO)
+}

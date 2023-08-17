@@ -13,11 +13,12 @@ type UserControl struct {
 
 // 返回错误码
 const (
-	ERR_BIND     = 40000
-	ERR_ADD_USER = 40001
-	ERR_LOGIN    = 40002
-	ERR_GET_NAME = 40003
-	ERR_DEL_NAME = 40004
+	ERR_BIND         = 40000
+	ERR_ADD_USER     = 40001
+	ERR_LOGIN        = 40002
+	ERR_GET_NAME     = 40003
+	ERR_DELETE_NAME  = 40004
+	ERR_UNPDATE_NAME = 40005
 )
 
 // 多用户访问，不做单例
@@ -123,12 +124,35 @@ func (c UserControl) DeleteUserByName(ctx *gin.Context) {
 	err = c.Service.DeleteUserByName(iCommonDTO.Name)
 	if err != nil {
 		c.ServerFail(ctx, ResponseJson{
-			Code: ERR_DEL_NAME,
+			Code: ERR_DELETE_NAME,
 			Msg:  err.Error(),
 		})
 		return
 	}
 	c.OK(ctx, ResponseJson{
 		Msg: "delete user success",
+	})
+}
+
+func (c UserControl) UpdateUserByName(ctx *gin.Context) {
+	var iUpdateUserDTO dto.UpdateUserDTO
+	err := ctx.ShouldBind(&iUpdateUserDTO)
+	if err != nil {
+		c.Fail(ctx, ResponseJson{
+			Code: ERR_BIND,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	err = c.Service.UpdateUserByName(&iUpdateUserDTO)
+	if err != nil {
+		c.ServerFail(ctx, ResponseJson{
+			Code: ERR_UNPDATE_NAME,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	c.OK(ctx, ResponseJson{
+		Msg: "update user success",
 	})
 }

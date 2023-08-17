@@ -72,8 +72,19 @@ func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, utils.Tokens, erro
 // 删除用户
 func (m *UserDao) DeleteUserByName(name string) error {
 	var user model.User
-	// Unscoped() 物理删除 没有就是逻辑删除
+	// 加上Unscoped() 物理删除 没有就是逻辑删除
 	//如果 name 不存在 也会返回删除成功 并无影响
 	//也可以先查询name是否存在返回err 但要多一次查询
 	return m.DB.Unscoped().Model(&user).Where("name=?", name).Delete(&user).Error
+}
+
+// 更新用户
+func (m *UserDao) UpdateUserByName(iUpdateUserDTO *dto.UpdateUserDTO) error {
+	var user model.User
+	user, err := m.GetUserByName(iUpdateUserDTO.Name)
+	if err != nil {
+		return err
+	}
+	iUpdateUserDTO.Convert2Model(&user)
+	return m.DB.Save(&user).Error
 }
