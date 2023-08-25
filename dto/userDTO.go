@@ -27,8 +27,9 @@ type LoginDTO struct {
 }
 
 type CommonDTO struct {
-	ID   uint   `json:"id" form:"id"`
-	Name string `json:"name" form:"name"`
+	ID    uint   `json:"id" form:"id"`
+	Name  string `json:"name" form:"name"`
+	Score int    `json:"score" form:"score"`
 }
 
 type UpdateUserDTO struct {

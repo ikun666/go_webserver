@@ -2,6 +2,7 @@ package dao
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/ikun666/go_webserver/dto"
 	"github.com/ikun666/go_webserver/global"
@@ -51,19 +52,25 @@ func (m *UserDao) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 }
 
 // 登录
-func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, utils.Tokens, error) {
+func (m *UserDao) Login(iLoginDTO *dto.LoginDTO) (model.User, string, error) {
 	// var user model.User
 	// err := m.DB.Model(&user).Where("name=? and password=?", iLoginDTO.Name, iLoginDTO.Password).Find(&user).Error
 	user, err := m.GetUserByName(iLoginDTO.Name)
 	//密码不对
 	if err != nil || !utils.ComparePassword(user.Password, iLoginDTO.Password) {
 		err = errors.New("password err")
-		return user, utils.Tokens{}, err
+		return user, "", err
 	} else {
-		token, err := utils.GetToken(user.ID, user.Name)
+		token, err := utils.GenerateToken(user.ID, user.Name)
 
 		if err != nil {
 			err = errors.New("get token err")
+		}
+		//生成redis
+		err = global.RedisClient.Set(fmt.Sprintf("userLogin%d", user.ID), token)
+		if err != nil {
+			err = errors.New("generate redis err")
+			return user, "", err
 		}
 		return user, token, err
 	}

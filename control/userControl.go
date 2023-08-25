@@ -1,6 +1,8 @@
 package control
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 	"github.com/ikun666/go_webserver/dto"
 	"github.com/ikun666/go_webserver/service"
@@ -71,13 +73,13 @@ func (c UserControl) Login(ctx *gin.Context) {
 	user, token, err := c.Service.Login(&iLoginDTO)
 	// fmt.Println(token)
 	if err != nil {
-		c.ServerFail(ctx, ResponseJson{
+		c.Fail(ctx, ResponseJson{
 			Code: ERR_LOGIN,
 			Msg:  err.Error(),
 		})
 		return
 	}
-	ctx.Set(token.AccessToken, user.Name)
+	ctx.Set(token, user.Name)
 	c.OK(ctx, ResponseJson{
 		Msg: "login success",
 		Data: gin.H{
@@ -154,5 +156,21 @@ func (c UserControl) UpdateUserByName(ctx *gin.Context) {
 	}
 	c.OK(ctx, ResponseJson{
 		Msg: "update user success",
+	})
+}
+func (c UserControl) TestApi(ctx *gin.Context) {
+	var iCommonDTO dto.CommonDTO
+	err := ctx.ShouldBind(&iCommonDTO)
+	if err != nil {
+		c.Fail(ctx, ResponseJson{
+			Code: ERR_BIND,
+			Msg:  err.Error(),
+		})
+		return
+	}
+	fmt.Println(iCommonDTO)
+	c.OK(ctx, ResponseJson{
+		Msg:  "test success",
+		Data: iCommonDTO,
 	})
 }

@@ -4,7 +4,6 @@ import (
 	"github.com/ikun666/go_webserver/dao"
 	"github.com/ikun666/go_webserver/dto"
 	"github.com/ikun666/go_webserver/model"
-	"github.com/ikun666/go_webserver/utils"
 )
 
 type UserService struct {
@@ -30,7 +29,7 @@ func (s *UserService) AddUser(iAddUserDTO *dto.AddUserDTO) error {
 }
 
 // 登录用户
-func (s *UserService) Login(iLoginDTO *dto.LoginDTO) (model.User, utils.Tokens, error) {
+func (s *UserService) Login(iLoginDTO *dto.LoginDTO) (model.User, string, error) {
 	return s.Dao.Login(iLoginDTO)
 }
 
